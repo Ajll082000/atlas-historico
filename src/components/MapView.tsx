@@ -31,6 +31,23 @@ interface MapViewProps {
 
 const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || '';
 
+// ISO 3166-1 alpha-2 codes for every country/territory in the Americas
+const AMERICA_ISO_CODES = [
+  // North America
+  'US', 'CA', 'MX', 'GL', 'BM',
+  // Central America
+  'GT', 'BZ', 'HN', 'SV', 'NI', 'CR', 'PA',
+  // Caribbean
+  'CU', 'JM', 'HT', 'DO', 'PR', 'BS', 'TT', 'BB', 'GD', 'LC', 'VC',
+  'AG', 'DM', 'KN', 'AI', 'VG', 'VI', 'KY', 'TC', 'MS', 'AW', 'CW',
+  'SX', 'BQ', 'GP', 'MQ', 'BL', 'MF',
+  // South America
+  'CO', 'VE', 'GY', 'SR', 'GF', 'EC', 'PE', 'BR', 'BO', 'PY', 'CL',
+  'AR', 'UY', 'FK',
+];
+
+const isAmerica = ['in', ['get', 'iso_3166_1'], ['literal', AMERICA_ISO_CODES]] as unknown[];
+
 // Active countries map for quick lookup
 const activeCountries = new Map<string, Country>();
 countriesData.countries.forEach((c) => {
@@ -104,7 +121,7 @@ export default function MapView({ onCountrySelect, selectedCountry }: MapViewPro
         paint: {
           'fill-color': [
             'case',
-            ['==', ['get', 'iso_3166_1'], 'NI'],
+            isAmerica,
             'rgba(0, 87, 184, 0.12)',
             'rgba(255,255,255,0.03)',
           ],
@@ -121,13 +138,13 @@ export default function MapView({ onCountrySelect, selectedCountry }: MapViewPro
         paint: {
           'line-color': [
             'case',
-            ['==', ['get', 'iso_3166_1'], 'NI'],
+            isAmerica,
             'rgba(0, 87, 184, 0.8)',
             'rgba(255,255,255,0.12)',
           ],
           'line-width': [
             'case',
-            ['==', ['get', 'iso_3166_1'], 'NI'],
+            isAmerica,
             1.5,
             0.5,
           ],
@@ -143,7 +160,7 @@ export default function MapView({ onCountrySelect, selectedCountry }: MapViewPro
         paint: {
           'fill-color': [
             'case',
-            ['==', ['get', 'iso_3166_1'], 'NI'],
+            isAmerica,
             'rgba(0, 87, 184, 0.35)',
             'rgba(201, 168, 76, 0.18)',
           ],
