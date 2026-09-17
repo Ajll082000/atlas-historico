@@ -1,11 +1,31 @@
 'use client';
 
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import CountryGrid from '@/components/CountryGrid';
-import MapPlaceholder from '@/components/MapPlaceholder';
+import MapView from '@/components/MapView';
+
+interface Country {
+  id: string;
+  name: string;
+  slug: string;
+  active: boolean;
+  colors?: {
+    primary: string;
+    secondary: string;
+    highlight: string;
+    glow: string;
+  };
+  flag?: string;
+  tagline?: string;
+  periodsCount?: number;
+  coordinates?: [number, number];
+  zoom?: number;
+}
 
 export default function HomePage() {
   const router = useRouter();
+  const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
 
   return (
     <main className="min-h-screen bg-atlas-base text-white flex flex-col relative overflow-x-hidden">
@@ -86,12 +106,12 @@ export default function HomePage() {
         </button>
       </header>
 
-      {/* ── MAPA PLACEHOLDER ── */}
+      {/* ── MAPA ── */}
       <section
-        aria-label="Mapa del mundo — próximamente interactivo"
-        className="relative w-full"
+        aria-label="Mapa interactivo del mundo con fronteras"
+        className="relative w-full h-[500px] md:h-[650px]"
       >
-        <MapPlaceholder />
+        <MapView onCountrySelect={setSelectedCountry} selectedCountry={selectedCountry} />
       </section>
 
       {/* ── PAÍS GRID ── */}
