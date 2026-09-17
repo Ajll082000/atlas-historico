@@ -1,0 +1,193 @@
+{
+  "countries": [
+    {
+      "id": "NIC",
+      "name": "Nicaragua",
+      "slug": "nicaragua",
+      "active": true,
+      "colors": {
+        "primary": "#0057B8",
+        "secondary": "#FFFFFF",
+        "highlight": "rgba(0, 87, 184, 0.4)",
+        "glow": "rgba(0, 87, 184, 0.6)"
+      },
+      "flag": "/flags/nicaragua.svg",
+      "tagline": "Desde 8000 a.C. — raíces precolombinas",
+      "periodsCount": 1,
+      "coordinates": [-85.2072, 12.8654],
+      "zoom": 6
+    },
+    {
+      "id": "USA",
+      "name": "United States",
+      "slug": "united-states",
+      "active": false,
+      "coordinates": [-95.7129, 37.0902],
+      "zoom": 4
+    },
+    {
+      "id": "MEX",
+      "name": "México",
+      "slug": "mexico",
+      "active": false,
+      "comingSoon": true,
+      "colors": {
+        "primary": "#006847",
+        "secondary": "#CE1126",
+        "highlight": "rgba(0, 104, 71, 0.35)",
+        "glow": "rgba(0, 104, 71, 0.5)"
+      },
+      "flag": "/flags/mexico.svg",
+      "tagline": "Desde 2000 a.C. — cuna de civilizaciones",
+      "periodsCount": 0,
+      "coordinates": [-102.5528, 23.6345],
+      "zoom": 5
+    },
+    {
+      "id": "COL",
+      "name": "Colombia",
+      "slug": "colombia",
+      "active": false,
+      "coordinates": [-74.2973, 4.5709],
+      "zoom": 5
+    },
+    {
+      "id": "ARG",
+      "name": "Argentina",
+      "slug": "argentina",
+      "active": false,
+      "coordinates": [-63.6167, -38.4161],
+      "zoom": 4
+    },
+    {
+      "id": "BRA",
+      "name": "Brazil",
+      "slug": "brazil",
+      "active": false,
+      "coordinates": [-51.9253, -14.2350],
+      "zoom": 4
+    },
+    {
+      "id": "ESP",
+      "name": "España",
+      "slug": "spain",
+      "active": false,
+      "comingSoon": true,
+      "colors": {
+        "primary": "#c60b1e",
+        "secondary": "#ffc400",
+        "highlight": "rgba(198, 11, 30, 0.35)",
+        "glow": "rgba(198, 11, 30, 0.5)"
+      },
+      "flag": "/flags/spain.svg",
+      "tagline": "Desde 3000 a.C. — legado imperial",
+      "periodsCount": 0,
+      "coordinates": [-3.7492, 40.4637],
+      "zoom": 6
+    },
+    {
+      "id": "DEU",
+      "name": "Germany",
+      "slug": "germany",
+      "active": false,
+      "coordinates": [10.4515, 51.1657],
+      "zoom": 6
+    },
+    {
+      "id": "FRA",
+      "name": "France",
+      "slug": "france",
+      "active": false,
+      "coordinates": [2.2137, 46.2276],
+      "zoom": 6
+    },
+    {
+      "id": "GBR",
+      "name": "United Kingdom",
+      "slug": "united-kingdom",
+      "active": false,
+      "coordinates": [-3.4360, 55.3781],
+      "zoom": 5
+    },
+    {
+      "id": "JPN",
+      "name": "Japan",
+      "slug": "japan",
+      "active": false,
+      "coordinates": [138.2529, 36.2048],
+      "zoom": 5
+    },
+    {
+      "id": "CHN",
+      "name": "China",
+      "slug": "china",
+      "active": false,
+      "coordinates": [104.1954, 35.8617],
+      "zoom": 4
+    },
+    {
+      "id": "IND",
+      "name": "India",
+      "slug": "india",
+      "active": false,
+      "coordinates": [78.9629, 20.5937],
+      "zoom": 4
+    },
+    {
+      "id": "RUS",
+      "name": "Russia",
+      "slug": "russia",
+      "active": false,
+      "coordinates": [105.3188, 61.5240],
+      "zoom": 3
+    },
+    {
+      "id": "EGY",
+      "name": "Egypt",
+      "slug": "egypt",
+      "active": false,
+      "coordinates": [30.8025, 26.8206],
+      "zoom": 6
+    },
+    {
+      "id": "GRC",
+      "name": "Greece",
+      "slug": "greece",
+      "active": false,
+      "coordinates": [21.8243, 39.0742],
+      "zoom": 6
+    },
+    {
+      "id": "PER",
+      "name": "Peru",
+      "slug": "peru",
+      "active": false,
+      "coordinates": [-75.0152, -9.1900],
+      "zoom": 5
+    },
+    {
+      "id": "TUR",
+      "name": "Turkey",
+      "slug": "turkey",
+      "active": false,
+      "coordinates": [35.2433, 38.9637],
+      "zoom": 5
+    },
+    {
+      "id": "ITA",
+      "name": "Italy",
+      "slug": "italy",
+      "active": false,
+      "coordinates": [12.5674, 41.8719],
+      "zoom": 6
+    },
+    {
+      "id": "PRT",
+      "name": "Portugal",
+      "slug": "portugal",
+      "active": false,
+      "coordinates": [-8.2245, 39.3999],
+      "zoom": 7
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  transpilePackages: ['mapbox-gl'],
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'eoimages.gsfc.nasa.gov',
+      },
+    ],
+  },
+};
+
+export default nextConfig;
