@@ -46,6 +46,8 @@ const FEDERATION_START = 1823;
 const FEDERATION_END = 1841;
 const FEDERATION_NAME = 'República Federal de Centroamérica';
 const FEDERATION_COLOR = '#0057B8';
+// Bandera histórica (1823-1839), Wikimedia Commons, CC BY-SA 2.5.
+const FEDERATION_FLAG_URL = 'https://upload.wikimedia.org/wikipedia/commons/e/e2/Flag_of_the_Federal_Republic_of_Central_America.svg';
 
 const isFederation = ['in', ['get', 'iso_3166_1'], ['literal', FEDERATION_ISO_CODES]] as unknown[];
 
@@ -238,6 +240,7 @@ export default function MapView({ onCountrySelect, selectedCountry, year = 2026 
           .setLngLat(e.lngLat)
           .setHTML(
             `<div class="tooltip-inner">
+              ${federationActive ? `<img class="tooltip-flag" src="${FEDERATION_FLAG_URL}" alt="" />` : ''}
               ${!federationActive && iso ? `<img class="tooltip-flag" src="${flagUrl(iso, 24)}" alt="" />` : ''}
               ${showActiveBadge ? '<span class="tooltip-active-dot"></span>' : ''}
               <span class="tooltip-name">${displayName}</span>
@@ -266,6 +269,7 @@ export default function MapView({ onCountrySelect, selectedCountry, year = 2026 
             iso2: iso,
             name: FEDERATION_NAME,
             slug: 'republica-federal-centroamerica',
+            flag: FEDERATION_FLAG_URL,
             active: false,
             tagline: 'Unión de Guatemala, El Salvador, Honduras, Nicaragua y Costa Rica entre 1823 y 1841.',
             colors: {

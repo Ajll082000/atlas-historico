@@ -36,20 +36,20 @@ export default function HomePage() {
   return (
     <main className="min-h-screen bg-atlas-base text-white flex flex-col relative overflow-x-hidden">
 
-      {/* ── AÑO (slider de prueba: 1821-2026) ── */}
+      {/* ── AÑO (slider de prueba: 1823-2026; antes de 1823 aún no hay datos) ── */}
       <div className="fixed top-5 right-5 md:top-6 md:right-8 z-30 flex flex-col items-end gap-1.5 w-36 md:w-44">
         <span className="font-display text-atlas-gold text-sm md:text-base tracking-[0.2em] tabular-nums">
           {year}
         </span>
         <input
           type="range"
-          min={1821}
+          min={FEDERATION_START}
           max={2026}
           step={1}
           value={year}
           onChange={(e) => setYear(Number(e.target.value))}
           className="year-slider w-full"
-          aria-label="Explora el mapa a través del tiempo, de 1821 a 2026"
+          aria-label="Explora el mapa a través del tiempo, de 1823 a 2026"
         />
         {isFederationYear && (
           <span className="font-body text-atlas-muted text-[10px] text-right leading-tight animate-fade-in">
