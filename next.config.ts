@@ -8,6 +8,10 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'eoimages.gsfc.nasa.gov',
       },
+      {
+        protocol: 'https',
+        hostname: 'flagcdn.com',
+      },
     ],
   },
 };

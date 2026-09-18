@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import CountryGrid from '@/components/CountryGrid';
 import MapView from '@/components/MapView';
+import CountryCard from '@/components/CountryCard';
 
 interface Country {
   id: string;
@@ -29,6 +30,14 @@ export default function HomePage() {
 
   return (
     <main className="min-h-screen bg-atlas-base text-white flex flex-col relative overflow-x-hidden">
+
+      {/* ── AÑO ── */}
+      <div
+        className="fixed top-5 right-5 md:top-6 md:right-8 z-30 font-display text-atlas-gold text-sm md:text-base tracking-[0.2em]"
+        aria-label="Año 2026"
+      >
+        2026
+      </div>
 
       {/* ── HERO ── */}
       <header className="relative z-10 flex flex-col items-center text-center px-6 pt-14 pb-10 md:pt-24 md:pb-14">
@@ -112,6 +121,15 @@ export default function HomePage() {
         className="relative w-full h-[500px] md:h-[650px]"
       >
         <MapView onCountrySelect={setSelectedCountry} selectedCountry={selectedCountry} />
+
+        {selectedCountry && (
+          <div className="absolute top-4 right-4 z-20 w-[calc(100%-2rem)] max-w-xs md:top-6 md:right-6">
+            <CountryCard
+              country={selectedCountry}
+              onClose={() => setSelectedCountry(null)}
+            />
+          </div>
+        )}
       </section>
 
       {/* ── PAÍS GRID ── */}

@@ -61,6 +61,15 @@ body {
   pointer-events: none;
 }
 
+.tooltip-flag {
+  width: 18px;
+  height: 13px;
+  object-fit: cover;
+  border-radius: 2px;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.15);
+}
+
 .tooltip-name {
   font-family: var(--font-body);
   font-size: 12px;

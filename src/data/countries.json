@@ -2,6 +2,7 @@
   "countries": [
     {
       "id": "NIC",
+      "iso2": "NI",
       "name": "Nicaragua",
       "slug": "nicaragua",
       "active": true,
@@ -19,6 +20,7 @@
     },
     {
       "id": "USA",
+      "iso2": "US",
       "name": "United States",
       "slug": "united-states",
       "active": false,
@@ -27,6 +29,7 @@
     },
     {
       "id": "MEX",
+      "iso2": "MX",
       "name": "México",
       "slug": "mexico",
       "active": false,
@@ -45,6 +48,7 @@
     },
     {
       "id": "COL",
+      "iso2": "CO",
       "name": "Colombia",
       "slug": "colombia",
       "active": false,
@@ -53,6 +57,7 @@
     },
     {
       "id": "ARG",
+      "iso2": "AR",
       "name": "Argentina",
       "slug": "argentina",
       "active": false,
@@ -61,6 +66,7 @@
     },
     {
       "id": "BRA",
+      "iso2": "BR",
       "name": "Brazil",
       "slug": "brazil",
       "active": false,
@@ -69,6 +75,7 @@
     },
     {
       "id": "ESP",
+      "iso2": "ES",
       "name": "España",
       "slug": "spain",
       "active": false,
@@ -87,6 +94,7 @@
     },
     {
       "id": "DEU",
+      "iso2": "DE",
       "name": "Germany",
       "slug": "germany",
       "active": false,
@@ -95,6 +103,7 @@
     },
     {
       "id": "FRA",
+      "iso2": "FR",
       "name": "France",
       "slug": "france",
       "active": false,
@@ -103,6 +112,7 @@
     },
     {
       "id": "GBR",
+      "iso2": "GB",
       "name": "United Kingdom",
       "slug": "united-kingdom",
       "active": false,
@@ -111,6 +121,7 @@
     },
     {
       "id": "JPN",
+      "iso2": "JP",
       "name": "Japan",
       "slug": "japan",
       "active": false,
@@ -119,6 +130,7 @@
     },
     {
       "id": "CHN",
+      "iso2": "CN",
       "name": "China",
       "slug": "china",
       "active": false,
@@ -127,6 +139,7 @@
     },
     {
       "id": "IND",
+      "iso2": "IN",
       "name": "India",
       "slug": "india",
       "active": false,
@@ -135,6 +148,7 @@
     },
     {
       "id": "RUS",
+      "iso2": "RU",
       "name": "Russia",
       "slug": "russia",
       "active": false,
@@ -143,6 +157,7 @@
     },
     {
       "id": "EGY",
+      "iso2": "EG",
       "name": "Egypt",
       "slug": "egypt",
       "active": false,
@@ -151,6 +166,7 @@
     },
     {
       "id": "GRC",
+      "iso2": "GR",
       "name": "Greece",
       "slug": "greece",
       "active": false,
@@ -159,6 +175,7 @@
     },
     {
       "id": "PER",
+      "iso2": "PE",
       "name": "Peru",
       "slug": "peru",
       "active": false,
@@ -167,6 +184,7 @@
     },
     {
       "id": "TUR",
+      "iso2": "TR",
       "name": "Turkey",
       "slug": "turkey",
       "active": false,
@@ -175,6 +193,7 @@
     },
     {
       "id": "ITA",
+      "iso2": "IT",
       "name": "Italy",
       "slug": "italy",
       "active": false,
@@ -183,6 +202,7 @@
     },
     {
       "id": "PRT",
+      "iso2": "PT",
       "name": "Portugal",
       "slug": "portugal",
       "active": false,

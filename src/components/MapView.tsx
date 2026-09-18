@@ -5,9 +5,11 @@ import { useRouter } from 'next/navigation';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import countriesData from '@/data/countries.json';
+import { AMERICA_FLAG_COLORS, hexToRgba, flagUrl } from '@/data/americaFlags';
 
 interface Country {
   id: string;
+  iso2?: string;
   name: string;
   slug: string;
   active: boolean;
@@ -31,22 +33,20 @@ interface MapViewProps {
 
 const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || '';
 
-// ISO 3166-1 alpha-2 codes for every country/territory in the Americas
-const AMERICA_ISO_CODES = [
-  // North America
-  'US', 'CA', 'MX', 'GL', 'BM',
-  // Central America
-  'GT', 'BZ', 'HN', 'SV', 'NI', 'CR', 'PA',
-  // Caribbean
-  'CU', 'JM', 'HT', 'DO', 'PR', 'BS', 'TT', 'BB', 'GD', 'LC', 'VC',
-  'AG', 'DM', 'KN', 'AI', 'VG', 'VI', 'KY', 'TC', 'MS', 'AW', 'CW',
-  'SX', 'BQ', 'GP', 'MQ', 'BL', 'MF',
-  // South America
-  'CO', 'VE', 'GY', 'SR', 'GF', 'EC', 'PE', 'BR', 'BO', 'PY', 'CL',
-  'AR', 'UY', 'FK',
-];
+const AMERICA_ISO_CODES = Object.keys(AMERICA_FLAG_COLORS);
 
 const isAmerica = ['in', ['get', 'iso_3166_1'], ['literal', AMERICA_ISO_CODES]] as unknown[];
+
+// Builds a Mapbox `match` expression that maps each country's ISO code to a
+// color derived from its flag, falling back to `fallback` for the rest of the world.
+function buildFlagColorExpression(alpha: number, fallback: string): unknown[] {
+  const expr: unknown[] = ['match', ['get', 'iso_3166_1']];
+  Object.entries(AMERICA_FLAG_COLORS).forEach(([iso, hex]) => {
+    expr.push(iso, hexToRgba(hex, alpha));
+  });
+  expr.push(fallback);
+  return expr;
+}
 
 // Active countries map for quick lookup
 const activeCountries = new Map<string, Country>();
@@ -119,12 +119,7 @@ export default function MapView({ onCountrySelect, selectedCountry }: MapViewPro
         source: { type: 'vector', url: 'mapbox://mapbox.country-boundaries-v1' },
         'source-layer': 'country_boundaries',
         paint: {
-          'fill-color': [
-            'case',
-            isAmerica,
-            'rgba(0, 87, 184, 0.12)',
-            'rgba(255,255,255,0.03)',
-          ],
+          'fill-color': buildFlagColorExpression(0.16, 'rgba(255,255,255,0.03)') as never,
           'fill-opacity': 1,
         },
       });
@@ -136,12 +131,7 @@ export default function MapView({ onCountrySelect, selectedCountry }: MapViewPro
         source: { type: 'vector', url: 'mapbox://mapbox.country-boundaries-v1' },
         'source-layer': 'country_boundaries',
         paint: {
-          'line-color': [
-            'case',
-            isAmerica,
-            'rgba(0, 87, 184, 0.8)',
-            'rgba(255,255,255,0.12)',
-          ],
+          'line-color': buildFlagColorExpression(0.9, 'rgba(255,255,255,0.12)') as never,
           'line-width': [
             'case',
             isAmerica,
@@ -158,12 +148,7 @@ export default function MapView({ onCountrySelect, selectedCountry }: MapViewPro
         source: { type: 'vector', url: 'mapbox://mapbox.country-boundaries-v1' },
         'source-layer': 'country_boundaries',
         paint: {
-          'fill-color': [
-            'case',
-            isAmerica,
-            'rgba(0, 87, 184, 0.35)',
-            'rgba(201, 168, 76, 0.18)',
-          ],
+          'fill-color': buildFlagColorExpression(0.45, 'rgba(201, 168, 76, 0.18)') as never,
           'fill-opacity': 0,
         },
       });
@@ -222,6 +207,7 @@ export default function MapView({ onCountrySelect, selectedCountry }: MapViewPro
           .setLngLat(e.lngLat)
           .setHTML(
             `<div class="tooltip-inner">
+              ${iso ? `<img class="tooltip-flag" src="${flagUrl(iso, 24)}" alt="" />` : ''}
               ${iso === 'NI' ? '<span class="tooltip-active-dot"></span>' : ''}
               <span class="tooltip-name">${countryName || iso}</span>
               ${iso === 'NI' ? '<span class="tooltip-active-badge">Activo</span>' : ''}
@@ -242,25 +228,45 @@ export default function MapView({ onCountrySelect, selectedCountry }: MapViewPro
       m.on('click', 'country-fills', (e) => {
         if (!e.features || e.features.length === 0) return;
         const iso = e.features[0].properties?.iso_3166_1 as string;
+        const flagHex = AMERICA_FLAG_COLORS[iso];
 
-        if (iso === 'NI') {
-          const nic = countriesData.countries.find((c) => c.id === 'NIC') as Country;
-          onCountrySelect(nic);
-          flyToCountry(nic);
-        } else {
-          const country = countriesData.countries.find((c) => c.id === iso);
-          if (country) {
-            onCountrySelect(country as Country);
-          } else {
-            // Country not in our list — still show "coming soon"
-            onCountrySelect({
+        const known = countriesData.countries.find((c) => c.iso2 === iso);
+
+        const country: Country = known
+          ? {
+              ...(known as Country),
+              flag: known.flag || (iso ? flagUrl(iso, 80) : undefined),
+              colors:
+                known.colors ||
+                (flagHex
+                  ? {
+                      primary: flagHex,
+                      secondary: '#FFFFFF',
+                      highlight: hexToRgba(flagHex, 0.35),
+                      glow: hexToRgba(flagHex, 0.5),
+                    }
+                  : undefined),
+            }
+          : {
+              // Country not in our list — still show "coming soon"
               id: iso,
+              iso2: iso,
               name: e.features[0].properties?.name_en || iso,
               slug: iso.toLowerCase(),
               active: false,
-            });
-          }
-        }
+              flag: iso ? flagUrl(iso, 80) : undefined,
+              colors: flagHex
+                ? {
+                    primary: flagHex,
+                    secondary: '#FFFFFF',
+                    highlight: hexToRgba(flagHex, 0.35),
+                    glow: hexToRgba(flagHex, 0.5),
+                  }
+                : undefined,
+            };
+
+        onCountrySelect(country);
+        if (country.active && country.coordinates) flyToCountry(country);
       });
 
       setMapLoaded(true);
