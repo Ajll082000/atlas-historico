@@ -29,6 +29,7 @@ interface Country {
 interface MapViewProps {
   onCountrySelect: (country: Country | null) => void;
   selectedCountry: Country | null;
+  year?: number;
 }
 
 const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || '';
@@ -36,6 +37,21 @@ const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || '';
 const AMERICA_ISO_CODES = Object.keys(AMERICA_FLAG_COLORS);
 
 const isAmerica = ['in', ['get', 'iso_3166_1'], ['literal', AMERICA_ISO_CODES]] as unknown[];
+
+// Países que integraron la República Federal de Centroamérica (1823–1841).
+// Usa las fronteras actuales de cada país como aproximación: no tenemos
+// geometría histórica real, así que esto es solo una demostración.
+const FEDERATION_ISO_CODES = ['GT', 'SV', 'HN', 'NI', 'CR'];
+const FEDERATION_START = 1823;
+const FEDERATION_END = 1841;
+const FEDERATION_NAME = 'República Federal de Centroamérica';
+const FEDERATION_COLOR = '#0057B8';
+
+const isFederation = ['in', ['get', 'iso_3166_1'], ['literal', FEDERATION_ISO_CODES]] as unknown[];
+
+function isFederationYear(year: number) {
+  return year >= FEDERATION_START && year <= FEDERATION_END;
+}
 
 // Builds a Mapbox `match` expression that maps each country's ISO code to a
 // color derived from its flag, falling back to `fallback` for the rest of the world.
@@ -48,13 +64,18 @@ function buildFlagColorExpression(alpha: number, fallback: string): unknown[] {
   return expr;
 }
 
+// Colorea únicamente el bloque de la Federación; todo lo demás queda apagado.
+function buildFederationColorExpression(alpha: number, fallback: string): unknown[] {
+  return ['case', isFederation, hexToRgba(FEDERATION_COLOR, alpha), fallback];
+}
+
 // Active countries map for quick lookup
 const activeCountries = new Map<string, Country>();
 countriesData.countries.forEach((c) => {
   if (c.active) activeCountries.set(c.id, c as Country);
 });
 
-export default function MapView({ onCountrySelect, selectedCountry }: MapViewProps) {
+export default function MapView({ onCountrySelect, selectedCountry, year = 2026 }: MapViewProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const router = useRouter();
@@ -62,6 +83,12 @@ export default function MapView({ onCountrySelect, selectedCountry }: MapViewPro
   const hoveredCountryId = useRef<string | null>(null);
   const nicMarkerEl = useRef<HTMLDivElement | null>(null);
   const nicMarker = useRef<mapboxgl.Marker | null>(null);
+  // Los listeners del mapa se registran una sola vez al montar, así que usamos
+  // un ref para que siempre lean el año más reciente (evita closures obsoletos).
+  const yearRef = useRef(year);
+  useEffect(() => {
+    yearRef.current = year;
+  }, [year]);
 
   const flyToCountry = useCallback((country: Country) => {
     if (!map.current || !country.coordinates) return;
@@ -203,14 +230,18 @@ export default function MapView({ onCountrySelect, selectedCountry }: MapViewPro
 
         m.getCanvas().style.cursor = 'pointer';
 
+        const federationActive = isFederationYear(yearRef.current) && FEDERATION_ISO_CODES.includes(iso);
+        const displayName = federationActive ? FEDERATION_NAME : countryName || iso;
+        const showActiveBadge = !federationActive && iso === 'NI';
+
         tooltip
           .setLngLat(e.lngLat)
           .setHTML(
             `<div class="tooltip-inner">
-              ${iso ? `<img class="tooltip-flag" src="${flagUrl(iso, 24)}" alt="" />` : ''}
-              ${iso === 'NI' ? '<span class="tooltip-active-dot"></span>' : ''}
-              <span class="tooltip-name">${countryName || iso}</span>
-              ${iso === 'NI' ? '<span class="tooltip-active-badge">Activo</span>' : ''}
+              ${!federationActive && iso ? `<img class="tooltip-flag" src="${flagUrl(iso, 24)}" alt="" />` : ''}
+              ${showActiveBadge ? '<span class="tooltip-active-dot"></span>' : ''}
+              <span class="tooltip-name">${displayName}</span>
+              ${showActiveBadge ? '<span class="tooltip-active-badge">Activo</span>' : ''}
             </div>`
           )
           .addTo(m);
@@ -228,6 +259,25 @@ export default function MapView({ onCountrySelect, selectedCountry }: MapViewPro
       m.on('click', 'country-fills', (e) => {
         if (!e.features || e.features.length === 0) return;
         const iso = e.features[0].properties?.iso_3166_1 as string;
+
+        if (isFederationYear(yearRef.current) && FEDERATION_ISO_CODES.includes(iso)) {
+          onCountrySelect({
+            id: 'RFCA',
+            iso2: iso,
+            name: FEDERATION_NAME,
+            slug: 'republica-federal-centroamerica',
+            active: false,
+            tagline: 'Unión de Guatemala, El Salvador, Honduras, Nicaragua y Costa Rica entre 1823 y 1841.',
+            colors: {
+              primary: FEDERATION_COLOR,
+              secondary: '#FFFFFF',
+              highlight: hexToRgba(FEDERATION_COLOR, 0.35),
+              glow: hexToRgba(FEDERATION_COLOR, 0.5),
+            },
+          });
+          return;
+        }
+
         const flagHex = AMERICA_FLAG_COLORS[iso];
 
         const known = countriesData.countries.find((c) => c.iso2 === iso);
@@ -280,6 +330,26 @@ export default function MapView({ onCountrySelect, selectedCountry }: MapViewPro
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Recolorea el mapa según el año seleccionado: dentro de 1823-1841 solo se
+  // resalta el bloque de la Federación Centroamericana; el resto del tiempo,
+  // vuelve al color por bandera de cada país.
+  useEffect(() => {
+    if (!map.current || !mapLoaded) return;
+    const m = map.current;
+
+    if (isFederationYear(year)) {
+      m.setPaintProperty('country-fills', 'fill-color', buildFederationColorExpression(0.3, 'rgba(255,255,255,0.03)') as never);
+      m.setPaintProperty('country-borders', 'line-color', buildFederationColorExpression(0.9, 'rgba(255,255,255,0.12)') as never);
+      m.setPaintProperty('country-borders', 'line-width', ['case', isFederation, 1.5, 0.5] as never);
+      m.setPaintProperty('country-hover', 'fill-color', buildFederationColorExpression(0.45, 'rgba(201, 168, 76, 0.18)') as never);
+    } else {
+      m.setPaintProperty('country-fills', 'fill-color', buildFlagColorExpression(0.16, 'rgba(255,255,255,0.03)') as never);
+      m.setPaintProperty('country-borders', 'line-color', buildFlagColorExpression(0.9, 'rgba(255,255,255,0.12)') as never);
+      m.setPaintProperty('country-borders', 'line-width', ['case', isAmerica, 1.5, 0.5] as never);
+      m.setPaintProperty('country-hover', 'fill-color', buildFlagColorExpression(0.45, 'rgba(201, 168, 76, 0.18)') as never);
+    }
+  }, [year, mapLoaded]);
 
   // Highlight selected country on map
   useEffect(() => {
