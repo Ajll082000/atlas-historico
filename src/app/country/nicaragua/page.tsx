@@ -5,9 +5,11 @@ import NicaraguaMap from '@/components/NicaraguaMap';
 import {
   quickFacts,
   regions,
+  volcanoes,
   geoHighlights,
   governmentStructure,
   governmentTimeline,
+  gdpFacts,
   economySectors,
   economyFacts,
   dailyLifeNotes,
@@ -147,7 +149,7 @@ export default function NicaraguaPage() {
             ))}
           </div>
 
-          <div className="rounded-xl border border-white/8 bg-atlas-surface p-5">
+          <div className="rounded-xl border border-white/8 bg-atlas-surface p-5 mb-8">
             <p className="font-body text-atlas-muted text-[11px] uppercase tracking-[0.2em] mb-4">
               Lugares para ubicarse
             </p>
@@ -159,6 +161,38 @@ export default function NicaraguaPage() {
                 </div>
               ))}
             </dl>
+          </div>
+
+          <div className="rounded-xl border border-white/8 bg-atlas-card p-5">
+            <p className="font-body text-atlas-muted text-[11px] uppercase tracking-[0.2em] mb-4">
+              Los volcanes de Nicaragua
+            </p>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="border-b border-white/8">
+                    <th className="font-body text-atlas-muted text-xs uppercase tracking-wider font-medium py-2 pr-4">
+                      Volcán
+                    </th>
+                    <th className="font-body text-atlas-muted text-xs uppercase tracking-wider font-medium py-2 pr-4">
+                      Elevación
+                    </th>
+                    <th className="font-body text-atlas-muted text-xs uppercase tracking-wider font-medium py-2">
+                      Última actividad
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {volcanoes.map((v) => (
+                    <tr key={v.name} className="border-b border-white/5 last:border-0">
+                      <td className="font-body text-atlas-soft text-sm py-2.5 pr-4 whitespace-nowrap">{v.name}</td>
+                      <td className="font-body text-atlas-soft text-sm py-2.5 pr-4 whitespace-nowrap">{v.elevation}</td>
+                      <td className="font-body text-atlas-muted text-sm py-2.5">{v.lastEruption}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </section>
 
@@ -214,12 +248,28 @@ export default function NicaraguaPage() {
           <SectionEyebrow n="04" title="Economía y vida cotidiana" />
           <h2 className="font-display text-3xl md:text-4xl text-white mb-6">Economía y vida cotidiana</h2>
 
+          <div className="rounded-xl border border-white/8 bg-atlas-surface p-5 mb-6">
+            <p className="font-body text-atlas-muted text-[11px] uppercase tracking-[0.2em] mb-4">
+              Producto Interno Bruto · est. 2026
+            </p>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {gdpFacts.map((g) => (
+                <div key={g.label}>
+                  <p className="font-display text-xl md:text-2xl text-atlas-gold leading-tight mb-1">{g.value}</p>
+                  <p className="font-body text-atlas-muted text-xs leading-snug">{g.label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <p className="font-body text-atlas-muted text-xs uppercase tracking-[0.2em] mb-3">
+            Composición del PIB por sector · 2017
+          </p>
           <div className="flex flex-col sm:flex-row gap-3 mb-8">
             {economySectors.map((s) => (
               <div key={s.label} className="flex-1 rounded-xl border border-white/8 bg-atlas-card p-4 text-center">
                 <p className="font-display text-2xl text-atlas-gold mb-1">{s.value}</p>
                 <p className="font-body text-atlas-soft text-sm">{s.label}</p>
-                <p className="font-body text-atlas-muted text-[11px] mt-1">dato de {s.year}</p>
               </div>
             ))}
           </div>

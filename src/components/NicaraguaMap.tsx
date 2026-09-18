@@ -15,8 +15,11 @@ const PLACES: { name: string; coords: [number, number]; kind: 'city' | 'volcano'
   { name: 'Bluefields', coords: [-83.7670, 11.9950], kind: 'city' },
   { name: 'Bilwi (Puerto Cabezas)', coords: [-83.3860, 14.0330], kind: 'city' },
   { name: 'Momotombo', coords: [-86.5400, 12.4220], kind: 'volcano' },
-  { name: 'Concepción / Ometepe', coords: [-85.6220, 11.5380], kind: 'volcano' },
+  { name: 'Concepción y Maderas (Ometepe)', coords: [-85.6220, 11.5380], kind: 'volcano' },
   { name: 'Masaya', coords: [-86.1610, 11.9840], kind: 'volcano' },
+  { name: 'San Cristóbal', coords: [-87.0039, 12.7019], kind: 'volcano' },
+  { name: 'Cerro Negro', coords: [-86.7019, 12.5061], kind: 'volcano' },
+  { name: 'Cosigüina', coords: [-87.5667, 12.9833], kind: 'volcano' },
 ];
 
 export default function NicaraguaMap() {

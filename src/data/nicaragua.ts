@@ -31,6 +31,16 @@ export const regions = [
   },
 ];
 
+export const volcanoes: { name: string; elevation: string; lastEruption: string }[] = [
+  { name: 'San Cristóbal', elevation: '1745 m', lastEruption: 'actividad registrada en 2024' },
+  { name: 'Concepción', elevation: '1700 m', lastEruption: 'actividad registrada en 2024' },
+  { name: 'Maderas', elevation: '1394 m', lastEruption: 'sin erupciones históricas registradas (época holocena)' },
+  { name: 'Momotombo', elevation: '1297 m', lastEruption: '2015' },
+  { name: 'Cosigüina', elevation: '872 m', lastEruption: '1859' },
+  { name: 'Cerro Negro', elevation: '728 m', lastEruption: '1999' },
+  { name: 'Masaya', elevation: '635 m', lastEruption: 'actividad continua (lago de lava activo)' },
+];
+
 export const geoHighlights = [
   { label: 'Lagos', value: 'Cocibolca / lago de Nicaragua y Xolotlán / lago de Managua' },
   {
@@ -74,6 +84,13 @@ export const governmentTimeline = [
     year: '2026',
     text: 'En julio, Ortega anuncia durante un acto por el 47.º aniversario de la revolución que el país no volverá a celebrar elecciones. Organizaciones como Freedom House, la ONU y el Departamento de Estado de EE. UU. condenaron el anuncio.',
   },
+];
+
+export const gdpFacts: { label: string; value: string }[] = [
+  { label: 'PIB nominal', value: 'US$ 24 227 millones' },
+  { label: 'PIB nominal per cápita', value: 'US$ 3 559' },
+  { label: 'PIB (paridad de poder adquisitivo)', value: 'US$ 69 515 millones' },
+  { label: 'PIB PPA per cápita', value: 'US$ 10 211' },
 ];
 
 export const economySectors = [
