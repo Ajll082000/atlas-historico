@@ -341,17 +341,30 @@ export default function MapView({ onCountrySelect, selectedCountry, year = 2026 
   useEffect(() => {
     if (!map.current || !mapLoaded) return;
     const m = map.current;
+    const federationActive = isFederationYear(year);
 
-    if (isFederationYear(year)) {
+    if (federationActive) {
       m.setPaintProperty('country-fills', 'fill-color', buildFederationColorExpression(0.3, 'rgba(255,255,255,0.03)') as never);
       m.setPaintProperty('country-borders', 'line-color', buildFederationColorExpression(0.9, 'rgba(255,255,255,0.12)') as never);
-      m.setPaintProperty('country-borders', 'line-width', ['case', isFederation, 1.5, 0.5] as never);
+      // Sin trazo entre los 5 países: al compartir el mismo relleno, sus
+      // fronteras internas "desaparecen" y solo queda visible la silueta
+      // exterior por el contraste con el mapa apagado alrededor.
+      m.setPaintProperty('country-borders', 'line-width', ['case', isFederation, 0, 0.5] as never);
       m.setPaintProperty('country-hover', 'fill-color', buildFederationColorExpression(0.45, 'rgba(201, 168, 76, 0.18)') as never);
     } else {
       m.setPaintProperty('country-fills', 'fill-color', buildFlagColorExpression(0.16, 'rgba(255,255,255,0.03)') as never);
       m.setPaintProperty('country-borders', 'line-color', buildFlagColorExpression(0.9, 'rgba(255,255,255,0.12)') as never);
       m.setPaintProperty('country-borders', 'line-width', ['case', isAmerica, 1.5, 0.5] as never);
       m.setPaintProperty('country-hover', 'fill-color', buildFlagColorExpression(0.45, 'rgba(201, 168, 76, 0.18)') as never);
+    }
+
+    // Nicaragua como tal no existía durante la Federación: se oculta su pin.
+    if (nicMarker.current) {
+      if (federationActive) {
+        nicMarker.current.remove();
+      } else {
+        nicMarker.current.addTo(m);
+      }
     }
   }, [year, mapLoaded]);
 
